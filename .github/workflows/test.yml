@@ -15,4 +15,4 @@ jobs:
     steps:
     - name: Say Hello      
       run: |
-        ls -l
+        echo "Hello"
