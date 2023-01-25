@@ -20,4 +20,4 @@ jobs:
 
     - name: Say Hello      
       run: |
-        cat README.md
+        ls -l
