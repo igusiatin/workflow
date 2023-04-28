@@ -40,6 +40,7 @@ jobs:
         with:
           tag_name: ${{ env.RELEASE_VERSION }}
           release_name: "Release ${{ env.RELEASE_VERSION }}"
-          body: "${{ env.PR_DESCRIPTION }}"
+          body: |
+            ${{ env.PR_DESCRIPTION }}
           draft: false
           prerelease: false
