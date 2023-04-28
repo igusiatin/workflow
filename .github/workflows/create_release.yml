@@ -23,6 +23,7 @@ jobs:
           BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
           VERSION=${BRANCH_NAME#release/}
           echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "BODY=${{ github.event.pull_request.body }}" >> $GITHUB_ENV
 
       - name: Extract version from branch name (for hotfix branches)
         if: startsWith(github.event.pull_request.head.ref, 'hotfix/')
@@ -33,7 +34,7 @@ jobs:
 
       - name: Test
         run: |
-          echo ${{ github.event.pull_request.body }}
+          echo 
       # - name: Create Release
       #   id: create_release
       #   uses: actions/create-release@v1
