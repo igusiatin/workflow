@@ -23,8 +23,9 @@ jobs:
         run: |
           BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
           VERSION=${BRANCH_NAME#release/}
+          BASE64_BODY=echo ${{ github.event.pull_request.body }} | base64
           echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
-          echo "PR_DESCRIPTION= echo ${{ github.event.pull_request.body }} | base64" >> $GITHUB_ENV
+          echo "PR_DESCRIPTION=$BASE64_BODY" >> $GITHUB_ENV
 
       - name: Extract version from branch name (for hotfix branches)
         if: startsWith(github.event.pull_request.head.ref, 'hotfix/')
