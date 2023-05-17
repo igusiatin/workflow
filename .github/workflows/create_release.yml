@@ -9,7 +9,6 @@ on:
 env:
   RELEASE_VERSION: ${{ github.ref }}
   PR_DESCRIPTION: ${{ github.ref }}
-  JSON_RESPONSE: "test"
 
 jobs:
   release:
@@ -25,17 +24,15 @@ jobs:
           BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
           VERSION=${BRANCH_NAME#release/}
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
-          echo "JSON_RESPONSE<<$EOF" >> "$GITHUB_ENV"
-          curl https://example.com >> "$GITHUB_ENV"
+          echo "PR_DESCRIPTION<<$EOF" >> "$GITHUB_ENV"
+          echo ${{ github.event.pull_request.body }}>> "$GITHUB_ENV"
           echo "$EOF" >> "$GITHUB_ENV"
 
-          echo "PR_DESCRIPTION=test" >> $GITHUB_ENV 
           echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: check vars
         run: |
-          echo ${{ env.JSON_RESPONSE }}
-          BASE64_BODY=`echo '${{ github.event.pull_request.body }}' | base64`
+          echo ${{ env.PR_DESCRIPTION }}
 
       - name: Create Release
         id: create_release
