@@ -1,2 +1,2 @@
 Hello
-release v0.9
+release v1.0
