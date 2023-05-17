@@ -9,6 +9,7 @@ on:
 env:
   RELEASE_VERSION: ${{ github.ref }}
   PR_DESCRIPTION: ${{ github.ref }}
+  JSON_RESPONSE: "test"
 
 jobs:
   release:
@@ -23,17 +24,18 @@ jobs:
         run: |
           BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
           VERSION=${BRANCH_NAME#release/}
-          BASE64_BODY=`echo '${{ github.event.pull_request.body }}'`
-          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
-          echo "PR_DESCRIPTION=$BASE64_BODY" >> $GITHUB_ENV
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "JSON_RESPONSE<<$EOF" >> "$GITHUB_ENV"
+          curl https://example.com >> "$GITHUB_ENV"
+          echo "$EOF" >> "$GITHUB_ENV"
 
-      - name: Extract version from branch name (for hotfix branches)
-        if: startsWith(github.event.pull_request.head.ref, 'hotfix/')
-        run: |
-          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
-          VERSION=${BRANCH_NAME#hotfix/}
+          echo "PR_DESCRIPTION=test" >> $GITHUB_ENV 
           echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
-          echo "PR_DESCRIPTION='${{ github.event.pull_request.body }}'" >> $GITHUB_ENV
+
+      - name: check vars
+        run: |
+          BASE64_BODY=`echo '${{ github.event.pull_request.body }}'`
+          echo ${{ env.JSON_RESPONSE }}
 
       - name: Create Release
         id: create_release
