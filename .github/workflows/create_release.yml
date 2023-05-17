@@ -23,7 +23,7 @@ jobs:
         run: |
           BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
           VERSION=${BRANCH_NAME#release/}
-          BASE64_BODY=echo '${{ github.event.pull_request.body }}' | base64
+          BODY='${{ github.event.pull_request.body }}'
           echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
           echo "PR_DESCRIPTION=$BASE64_BODY" >> $GITHUB_ENV
 
@@ -43,6 +43,6 @@ jobs:
         with:
           tag_name: ${{ env.RELEASE_VERSION }}
           release_name: "${{ env.RELEASE_VERSION }}"
-          body: echo ${{ env.PR_DESCRIPTION }} | base64 --decode
+          body: ${{ env.PR_DESCRIPTION }}
           draft: false
           prerelease: false
